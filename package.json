@@ -17,7 +17,6 @@
     "urlencoded-body-parser": "^2.0.1"
   },
   "devDependencies": {
-    "request": "^2.88.0",
     "tape": "^4.7.0"
   },
   "repository": {
