@@ -5,14 +5,33 @@ const parser = require('body-parser');
 const urlencodedparser = require('urlencoded-body-parser')
 const PORT = process.env.PORT || 5000
 const collect = "https://collect.tealiumiq.com/event"
+const source = "collect-bridge"
 
 express()
   .use(express.static(path.join(__dirname, 'public')))
   .use(parser.json())
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
+  .post('/post/urlencodedform/:account/:profile/:event', (req, res) => convertPathedUrlEncodedForm(req, res) )
   .post('/post/urlencodedform', (req, res) => convertUrlEncodedForm(req, res))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
+
+// Adds param paths with body data for new request
+function convertPathedUrlEncodedForm(req, res) {
+  urlencodedparser(req).then(data => {
+    let account = req.params.account
+    let profile = req.params.profile
+    let event = req.params.event
+    let newContent = {tealium_account:account,
+                      tealium_profile:profile,
+                      tealium_event: event}
+    let newBody = Object.assign(newContent, data)
+    console.log(JSON.stringify(newBody))
+    forward(newBody, res)
+  }).catch(function(error){
+    res.status(404).send(error)
+  })
+}
 
 // Aggregates query string params with x-www-form-urlencoded data
 function convertUrlEncodedForm(req, res) {
@@ -32,6 +51,7 @@ function forward(newBody, res) {
     res.status(400).send("Request body missing tealium_account or tealium_profile")
     return
   }
+  newBody['forwarded_by'] = source
   request.post(
     collect,
     {json: newBody},

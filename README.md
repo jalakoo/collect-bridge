@@ -1,8 +1,23 @@
-# node-js-getting-started
+# COLLECT-BRIDGE
+Simple forwarding service for the reformatting POST calls using x-www-urlencoded forms to expected JSON body POST calls for Tealium Collect endpoint.
 
-A barebones Node.js app using [Express 4](http://expressjs.com/).
+# USAGE
+## With Query String Params
+PATH: /post/urlencodedform
+Any query string param will be appended to the requests x-www-urlencoded body.
 
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+Example URL: /post/urlencodedform?tealium_account=test&tealium_profile=main
+Example original request body: { "aFormKey" : "aFormValue" }
+Example output JSON body: { "aFormKey" : "aFormValue" , "tealium_account" : "test", "tealium_profile" : "main"}
+
+## With Paths
+PATH: /post/urlencodedform/:account/:profile/:event
+URL Params will be added into the requrest's x-www-urlencoded body.
+
+Example URL: /post/urlencodedform/test/main/a_descriptive_name
+Example original request body: { "aFormKey" : "aFormValue" }
+Example output JSON body: { "aFormKey" : "aFormValue" , "tealium_account" : "test", "tealium_profile" : "main", "tealium_event" : "a_descriptive_name" }
+
 
 ## Running Locally
 
