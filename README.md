@@ -1,7 +1,9 @@
 # COLLECT-BRIDGE
 Simple forwarding service for the reformatting POST calls using x-www-urlencoded forms to expected JSON body POST calls for Tealium Collect endpoint.
 
-# USAGE
+This service is currently located at: `https://collect-bridge.herokuapp.com`
+
+# Currently Available Options
 ## POST With Query String Params
 PATH: `/post/urlencodedform`
 Any query string param will be appended to the requests x-www-urlencoded body.
