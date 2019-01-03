@@ -52,9 +52,10 @@ function forward(newBody, res) {
     return
   }
   newBody['forwarded_by'] = source
+  let flattenedBody = flattenObject(newBody)
   request.post(
     collect,
-    {json: newBody},
+    {json: flattenedBody},
     function(error, response, body){
       if (error) {
         console(error)
@@ -79,4 +80,64 @@ function bodyValid(body) {
     return false
   }
   return true
+}
+
+// const flatten = (objectOrArray, prefix = '', formatter = (k) => (k)) => {
+//   const nestedFormatter = (k) => ('.' + k)
+//   const nestElement = (prev, value, key) => (
+//     (value && typeof value === 'object')
+//       ? { ...prev, ...flatten(value, `${prefix}${formatter(key)}`, nestedFormatter) }
+//       : { ...prev, ...{ [`${prefix}${formatter(key)}`]: value } });
+
+//   return Array.isArray(objectOrArray)
+//     ? objectOrArray.reduce(nestElement, {})
+//     : Object.keys(objectOrArray).reduce(
+//       (prev, element) => nestElement(prev, objectOrArray[element], element),
+//       {},
+//     );
+// };
+
+function flattenObject(ob) {
+  let toReturn = {};
+  let flatObject;
+  for (let i in ob) {
+  	// console.log(i+ ' ' + typeof(ob[i]));
+    if (!ob.hasOwnProperty(i)) {
+      continue;
+    }
+    //Exclude arrays from the final result
+    //Check this http://stackoverflow.com/questions/4775722/check-if-object-is-array
+    if(ob[i] && Array === ob[i].constructor){
+    	continue;
+    }
+    // Parse
+    if ((typeof ob[i]) === 'string' && isJson(ob[i]) == true ){
+        ob[i] = JSON.parse(ob[i])
+    }
+    if ((typeof ob[i]) === 'object') {
+      flatObject = flattenObject(ob[i]);
+      for (let x in flatObject) {
+        if (!flatObject.hasOwnProperty(x)) {
+          continue;
+        }
+        //Exclude arrays from the final result
+        if(flatObject[x] && Array === flatObject.constructor){
+        	continue;
+        }
+        toReturn[i + (!!isNaN(x) ? '.' + x : '')] = flatObject[x];
+      }
+    } else {
+      toReturn[i] = ob[i];
+    }
+  }
+  return toReturn;
+}
+
+function isJson(str) {
+  try {
+      JSON.parse(str);
+  } catch (e) {
+      return false;
+  }
+  return true;
 }
