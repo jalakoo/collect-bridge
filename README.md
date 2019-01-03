@@ -18,6 +18,10 @@ URL Params will be added into the requrest's x-www-urlencoded body.
 - Example original request body: { "aFormKey" : "aFormValue" }
 - Example output JSON body: { "aFormKey" : "aFormValue" , "tealium_account" : "test", "tealium_profile" : "main", "tealium_event" : "a_descriptive_name" }
 
+### Nested Objects & Stringified JSON Values
+- Nested objects will be flattened 
+- Stringified JSON values will parsed then flattened
+
 # DEPLOYING
 ## Running Locally
 Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
