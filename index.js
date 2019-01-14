@@ -82,21 +82,6 @@ function bodyValid(body) {
   return true
 }
 
-// const flatten = (objectOrArray, prefix = '', formatter = (k) => (k)) => {
-//   const nestedFormatter = (k) => ('.' + k)
-//   const nestElement = (prev, value, key) => (
-//     (value && typeof value === 'object')
-//       ? { ...prev, ...flatten(value, `${prefix}${formatter(key)}`, nestedFormatter) }
-//       : { ...prev, ...{ [`${prefix}${formatter(key)}`]: value } });
-
-//   return Array.isArray(objectOrArray)
-//     ? objectOrArray.reduce(nestElement, {})
-//     : Object.keys(objectOrArray).reduce(
-//       (prev, element) => nestElement(prev, objectOrArray[element], element),
-//       {},
-//     );
-// };
-
 function flattenObject(ob) {
   let toReturn = {};
   let flatObject;
